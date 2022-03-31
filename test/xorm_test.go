@@ -2,7 +2,7 @@ package test
 
 import (
 	"bytes"
-	"cloud-disk/models"
+	"cloud-disk/core/models"
 	"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
