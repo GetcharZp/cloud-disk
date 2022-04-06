@@ -27,7 +27,6 @@ func NewUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLogic {
 }
 
 func (l *UserLogic) User(req *types.LoginRequest) (resp *types.LoginReply, err error) {
-	// todo: add your logic here and delete this line
 	// 1、从数据库中查询当前用户
 	user := new(models.UserBasic)
 	has, err := models.Engine.Where("name = ? AND password = ?", req.Name, helper.Md5(req.Password)).Get(user)
