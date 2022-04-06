@@ -1,12 +1,13 @@
-type Request {
-	Name string `path:"name,options=you|me"`
-}
-
-type Response {
-	Message string `json:"message"`
-}
-
 service core-api {
-	@handler CoreHandler
-	get /from/:name(Request) returns (Response)
+	@handler User
+	post /user/login(LoginRequest) returns (LoginReply)
+}
+
+type LoginRequest {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+type LoginReply {
+	Token string `json:"token"`
 }
