@@ -1,6 +1,9 @@
 package define
 
-import "github.com/dgrijalva/jwt-go"
+import (
+	"github.com/dgrijalva/jwt-go"
+	"os"
+)
 
 type UserClaim struct {
 	Id       int
@@ -10,3 +13,4 @@ type UserClaim struct {
 }
 
 var JwtKey = "cloud-disk-key"
+var MailPassword = os.Getenv("MailPassword")
