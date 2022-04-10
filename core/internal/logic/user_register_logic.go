@@ -29,7 +29,7 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 
 func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterRequest) (resp *types.UserRegisterReply, err error) {
 	// 判断code是否一致
-	code, err := models.RDB.Get(l.ctx, req.Email).Result()
+	code, err := l.svcCtx.RDB.Get(l.ctx, req.Email).Result()
 	if err != nil {
 		return nil, errors.New("该邮箱的验证码为空")
 	}
@@ -38,7 +38,7 @@ func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterRequest) (resp *
 		return
 	}
 	// 判断用户名是否已存在
-	cnt, err := models.Engine.Where("name = ?", req.Name).Count(new(models.UserBasic))
+	cnt, err := l.svcCtx.Engine.Where("name = ?", req.Name).Count(new(models.UserBasic))
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterRequest) (resp *
 		Password: helper.Md5(req.Password),
 		Email:    req.Email,
 	}
-	n, err := models.Engine.Insert(user)
+	n, err := l.svcCtx.Engine.Insert(user)
 	if err != nil {
 		return nil, err
 	}
