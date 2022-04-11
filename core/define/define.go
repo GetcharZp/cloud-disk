@@ -20,3 +20,7 @@ var CodeLength = 6
 
 // CodeExpire 验证码过期时间（s）
 var CodeExpire = 300
+
+// TencentSecretKey 腾讯云对象存储
+var TencentSecretKey = os.Getenv("TencentSecretKey")
+var TencentSecretID = os.Getenv("TencentSecretID")
