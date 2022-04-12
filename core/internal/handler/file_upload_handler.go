@@ -22,19 +22,17 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		f, fh, err := r.FormFile("file")
+		file, fileHeader, err := r.FormFile("file")
 		if err != nil {
 			return
 		}
-		b := make([]byte, fh.Size)
-		f.Read(b)
-
-		/// Name string `json:"name,optional"`
-		//	Ext  string `json:"ext,optional"`
-		//	Size int64  `json:"size,optional"`
-		//	Path string `json:"path,optional"`
+		// 判断文件是否存在
+		b := make([]byte, fileHeader.Size)
+		_, err = file.Read(b)
+		if err != nil {
+			return
+		}
 		hash := fmt.Sprintf("%x", md5.Sum(b))
-		// 判断是否在库中存在
 		rp := new(models.RepositoryPool)
 		has, err := svcCtx.Engine.Where("hash = ?", hash).Get(rp)
 		if err != nil {
@@ -44,16 +42,18 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.OkJson(w, &types.FileUploadReply{Identity: rp.Identity})
 			return
 		}
-		// 上传文件到腾讯云
+		// 往COS中存储文件
 		cosPath, err := helper.CosUpload(r)
 		if err != nil {
 			return
 		}
-		req.Path = cosPath
+
+		// 往 logic 中传递 request
+		req.Name = fileHeader.Filename
+		req.Ext = path.Ext(fileHeader.Filename)
+		req.Size = fileHeader.Size
 		req.Hash = hash
-		req.Name = fh.Filename
-		req.Ext = path.Ext(fh.Filename)
-		req.Size = fh.Size
+		req.Path = cosPath
 
 		l := logic.NewFileUploadLogic(r.Context(), svcCtx)
 		resp, err := l.FileUpload(&req)
