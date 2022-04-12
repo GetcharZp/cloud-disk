@@ -2,14 +2,19 @@ package helper
 
 import (
 	"cloud-disk/core/define"
+	"context"
 	"crypto/md5"
 	"crypto/tls"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
 	uuid "github.com/satori/go.uuid"
+	"github.com/tencentyun/cos-go-sdk-v5"
 	"math/rand"
+	"net/http"
 	"net/smtp"
+	"net/url"
+	"path"
 	"time"
 )
 
@@ -59,4 +64,27 @@ func RandCode() string {
 
 func UUID() string {
 	return uuid.NewV4().String()
+}
+
+// CosUpload 上传文件到腾讯云
+func CosUpload(r *http.Request) (string, error) {
+	u, _ := url.Parse(define.CosBucket)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  define.TencentSecretID,
+			SecretKey: define.TencentSecretKey,
+		},
+	})
+
+	file, fileHeader, err := r.FormFile("file")
+	key := "cloud-disk/" + UUID() + path.Ext(fileHeader.Filename)
+
+	_, err = client.Object.Put(
+		context.Background(), key, file, nil,
+	)
+	if err != nil {
+		panic(err)
+	}
+	return define.CosBucket + "/" + key, nil
 }

@@ -15,6 +15,21 @@ service core-api {
 	@handler UserRegister
 	post /user/register(UserRegisterRequest) returns (UserRegisterReply)
 	
+	// 文件上传
+	@handler FileUpload
+	post /file/upload(FileUploadRequest) returns (FileUploadReply)
+}
+
+type FileUploadRequest {
+	Hash string `json:"hash,optional"`
+	Name string `json:"name,optional"`
+	Ext  string `json:"ext,optional"`
+	Size int64  `json:"size,optional"`
+	Path string `json:"path,optional"`
+}
+
+type FileUploadReply {
+	Identity string `json:"identity"`
 }
 
 type UserRegisterRequest {
