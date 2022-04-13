@@ -1,6 +1,8 @@
 # CloudDisk
 
 > 轻量级云盘系统，基于go-zero、xorm实现。
+> 
+> B站视频链接：https://www.bilibili.com/video/BV1cr4y1s7H4/
 
 使用到的命令
 ```text
