@@ -15,10 +15,29 @@ service core-api {
 	@handler UserRegister
 	post /user/register(UserRegisterRequest) returns (UserRegisterReply)
 	
+}
+
+@server (
+	middleware: Auth
+)
+service core-api {
 	// 文件上传
 	@handler FileUpload
 	post /file/upload(FileUploadRequest) returns (FileUploadReply)
+	
+	// 用户文件的关联存储
+	@handler UserRepositorySave
+	post /user/repository/save(UserRepositorySaveRequest) returns (UserRepositorySaveReply)
 }
+
+type UserRepositorySaveRequest {
+	ParentId           int64  `json:"parentId"`
+	RepositoryIdentity string `json:"repositoryIdentity"`
+	Ext                string `json:"ext"`
+	Name               string `json:"name"`
+}
+
+type UserRepositorySaveReply {}
 
 type FileUploadRequest {
 	Hash string `json:"hash,optional"`
@@ -30,6 +49,8 @@ type FileUploadRequest {
 
 type FileUploadReply {
 	Identity string `json:"identity"`
+	Ext      string `json:"ext"`
+	Name     string `json:"name"`
 }
 
 type UserRegisterRequest {

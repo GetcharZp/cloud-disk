@@ -39,7 +39,7 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		if has {
-			httpx.OkJson(w, &types.FileUploadReply{Identity: rp.Identity})
+			httpx.OkJson(w, &types.FileUploadReply{Identity: rp.Identity, Ext: rp.Ext, Name: rp.Name})
 			return
 		}
 		// 往COS中存储文件
