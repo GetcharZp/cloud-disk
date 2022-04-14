@@ -25,3 +25,6 @@ var CodeExpire = 300
 var TencentSecretKey = os.Getenv("TencentSecretKey")
 var TencentSecretID = os.Getenv("TencentSecretID")
 var CosBucket = "https://getcharzp-1256268070.cos.ap-chengdu.myqcloud.com"
+
+// PageSize 分页的默认参数
+var PageSize = 20
