@@ -28,3 +28,5 @@ var CosBucket = "https://getcharzp-1256268070.cos.ap-chengdu.myqcloud.com"
 
 // PageSize 分页的默认参数
 var PageSize = 20
+
+var Datetime = "2006-01-02 15:04:05"

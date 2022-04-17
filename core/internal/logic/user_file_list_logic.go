@@ -2,11 +2,11 @@ package logic
 
 import (
 	"cloud-disk/core/define"
-	"cloud-disk/core/models"
-	"context"
-
 	"cloud-disk/core/internal/svc"
 	"cloud-disk/core/internal/types"
+	"cloud-disk/core/models"
+	"context"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -44,6 +44,7 @@ func (l *UserFileListLogic) UserFileList(req *types.UserFileListRequest, userIde
 		Select("user_repository.id, user_repository.identity, user_repository.repository_identity, user_repository.ext,"+
 			"user_repository.name, repository_pool.path, repository_pool.size").
 		Join("LEFT", "repository_pool", "user_repository.repository_identity = repository_pool.identity").
+		Where("user_repository.deleted_at = ? OR user_repository.deleted_at IS NULL", time.Time{}.Format(define.Datetime)).
 		Limit(size, offset).Find(&uf)
 	if err != nil {
 		return

@@ -41,7 +41,17 @@ service core-api {
 	@handler UserFolderCreate
 	post /user/folder/create(UserFolderCreateRequest) returns (UserFolderCreateReply)
 	
+	// 用户-文件删除
+	@handler UserFileDelete
+	delete /user/file/delete(UserFileDeleteRequest) returns (UserFileDeleteReply)
+	
 }
+
+type UserFileDeleteRequest {
+	Identity string `json:"identity"`
+}
+
+type UserFileDeleteReply {}
 
 type UserFolderCreateRequest {
 	ParentId int64  `json:"parent_id"`
