@@ -74,6 +74,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/user/file/move",
 					Handler: UserFileMoveHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/share/basic/create",
+					Handler: ShareBasicCreateHandler(serverCtx),
+				},
 			}...,
 		),
 	)
