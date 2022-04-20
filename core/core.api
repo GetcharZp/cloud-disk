@@ -15,6 +15,10 @@ service core-api {
 	@handler UserRegister
 	post /user/register(UserRegisterRequest) returns (UserRegisterReply)
 	
+	// 获取资源详情
+	@handler ShareBasicDetail
+	get /share/basic/detail(ShareBasicDetailRequest) returns (ShareBasicDetailReply)
+	
 }
 
 @server (
@@ -55,9 +59,21 @@ service core-api {
 	
 }
 
-type ShareBasicCreateRequest {
+type ShareBasicDetailRequest {
+	Identity string `json:"identity"`
+}
+
+type ShareBasicDetailReply {
 	RepositoryIdentity string `json:"repository_identity"`
-	ExpiredTime        int    `json:"expired_time"`
+	Name               string `json:"name"`
+	Ext                string `json:"ext"`
+	Size               int64  `json:"size"`
+	Path               string `json:"path"`
+}
+
+type ShareBasicCreateRequest {
+	UserRepositoryIdentity string `json:"user_repository_identity"`
+	ExpiredTime            int    `json:"expired_time"`
 }
 
 type ShareBasicCreateReply {
