@@ -57,6 +57,19 @@ service core-api {
 	@handler ShareBasicCreate
 	post /share/basic/create(ShareBasicCreateRequest) returns (ShareBasicCreateReply)
 	
+	// 资源保存
+	@handler ShareBasicSave
+	post /share/basic/save(ShareBasicSaveRequest) returns (ShareBasicSaveReply)
+	
+}
+
+type ShareBasicSaveRequest {
+	RepositoryIdentity string `json:"repository_identity"`
+	ParentId           int64  `json:"parent_id"`
+}
+
+type ShareBasicSaveReply {
+	Identity string `json:"identity"`
 }
 
 type ShareBasicDetailRequest {
