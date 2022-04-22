@@ -30,3 +30,6 @@ var CosBucket = "https://getcharzp-1256268070.cos.ap-chengdu.myqcloud.com"
 var PageSize = 20
 
 var Datetime = "2006-01-02 15:04:05"
+
+var TokenExpire = 3600
+var RefreshTokenExpire = 7200
