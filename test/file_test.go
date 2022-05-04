@@ -11,17 +11,17 @@ import (
 )
 
 // 分片的大小
-const chunkSize = 100 * 1024 * 1024 // 100MB
-
+//const chunkSize = 100 * 1024 * 1024 // 100MB
+const chunkSize = 1024 * 1024 // 1MB
 // 文件分片
 func TestGenerateChunkFile(t *testing.T) {
-	fileInfo, err := os.Stat("test.mp4")
+	fileInfo, err := os.Stat("img/1ff6a037-409d-445a-86cc-6dbca2b29c87.jpeg")
 	if err != nil {
 		t.Fatal(err)
 	}
 	// 分片的个数
 	chunkNum := math.Ceil(float64(fileInfo.Size()) / float64(chunkSize))
-	myFile, err := os.OpenFile("test.mp4", os.O_RDONLY, 0666)
+	myFile, err := os.OpenFile("img/1ff6a037-409d-445a-86cc-6dbca2b29c87.jpeg", os.O_RDONLY, 0666)
 	if err != nil {
 		t.Fatal(err)
 	}
