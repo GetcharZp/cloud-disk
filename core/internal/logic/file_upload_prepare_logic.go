@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"cloud-disk/core/helper"
 	"cloud-disk/core/models"
 	"context"
 
@@ -35,7 +36,13 @@ func (l *FileUploadPrepareLogic) FileUploadPrepare(req *types.FileUploadPrepareR
 		// 秒传成功
 		resp.Identity = rp.Identity
 	} else {
-		// TODO : 获取该文件的UploadID,用来进行文件的分片上传
+		// 获取该文件的UploadID、Key,用来进行文件的分片上传
+		key, uploadId, err := helper.CosInitPart(req.Ext)
+		if err != nil {
+			return nil, err
+		}
+		resp.Key = key
+		resp.UploadId = uploadId
 	}
 
 	return
