@@ -1,7 +1,9 @@
 package logic
 
 import (
+	"cloud-disk/core/define"
 	"cloud-disk/core/helper"
+	"cloud-disk/core/models"
 	"context"
 	"github.com/tencentyun/cos-go-sdk-v5"
 
@@ -35,5 +37,15 @@ func (l *FileUploadChunkCompleteLogic) FileUploadChunkComplete(req *types.FileUp
 	}
 	err = helper.CosPartUploadComplete(req.Key, req.UploadId, co)
 
+	// 数据入库
+	rp := &models.RepositoryPool{
+		Identity: helper.UUID(),
+		Hash:     req.Md5,
+		Name:     req.Name,
+		Ext:      req.Ext,
+		Size:     req.Size,
+		Path:     define.CosBucket + "/" + req.Key,
+	}
+	l.svcCtx.Engine.Insert(rp)
 	return
 }
