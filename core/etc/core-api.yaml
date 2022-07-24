@@ -1,6 +1,7 @@
 Name: core-api
 Host: 0.0.0.0
 Port: 8888
+MaxBytes: 8388608
 
 Mysql:
   DataSource: root:abcdi2124Jcke23@tcp(192.168.1.8:3306)/cloud-disk?charset=utf8mb4&parseTime=True&loc=Local
