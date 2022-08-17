@@ -65,7 +65,7 @@ func AnalyzeToken(token string) (*define.UserClaim, error) {
 func MailSendCode(mail, code string) error {
 	e := email.NewEmail()
 	e.From = "Get <getcharzhaopan@163.com>"
-	e.To = []string{"getcharzp@qq.com"}
+	e.To = []string{mail}
 	e.Subject = "验证码发送测试"
 	e.HTML = []byte("你的验证码为：<h1>" + code + "</h1>")
 	err := e.SendWithTLS("smtp.163.com:465", smtp.PlainAuth("", "getcharzhaopan@163.com", define.MailPassword, "smtp.163.com"),
