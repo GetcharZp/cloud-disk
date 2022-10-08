@@ -57,7 +57,7 @@ type ShareBasicSaveReply struct {
 }
 
 type ShareBasicDetailRequest struct {
-	Identity string `json:"identity"`
+	Identity string `json:"identity,optional"`
 }
 
 type ShareBasicDetailReply struct {

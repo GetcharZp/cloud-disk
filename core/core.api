@@ -17,7 +17,7 @@ service core-api {
 	
 	// 获取资源详情
 	@handler ShareBasicDetail
-	post /share/basic/detail(ShareBasicDetailRequest) returns (ShareBasicDetailReply)
+	get /share/basic/detail(ShareBasicDetailRequest) returns (ShareBasicDetailReply)
 	
 }
 
@@ -141,7 +141,7 @@ type ShareBasicSaveReply {
 }
 
 type ShareBasicDetailRequest {
-	Identity string `json:"identity"`
+	Identity string `json:"identity,optional"`
 }
 
 type ShareBasicDetailReply {
