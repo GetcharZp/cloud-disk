@@ -5,7 +5,7 @@ service core-api {
 	
 	// 用户详情
 	@handler UserDetail
-	get /user/detail(UserDetailRequest) returns (UserDetailReply)
+	post /user/detail(UserDetailRequest) returns (UserDetailReply)
 	
 	// 验证码发送
 	@handler MailCodeSendRegister
@@ -17,7 +17,7 @@ service core-api {
 	
 	// 获取资源详情
 	@handler ShareBasicDetail
-	get /share/basic/detail(ShareBasicDetailRequest) returns (ShareBasicDetailReply)
+	post /share/basic/detail(ShareBasicDetailRequest) returns (ShareBasicDetailReply)
 	
 }
 
@@ -35,7 +35,7 @@ service core-api {
 	
 	// 用户文件列表
 	@handler UserFileList
-	get /user/file/list(UserFileListRequest) returns (UserFileListReply)
+	post /user/file/list(UserFileListRequest) returns (UserFileListReply)
 	
 	// 用户文件名称修改
 	@handler UserFileNameUpdate
