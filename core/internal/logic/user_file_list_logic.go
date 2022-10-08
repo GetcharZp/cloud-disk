@@ -39,8 +39,14 @@ func (l *UserFileListLogic) UserFileList(req *types.UserFileListRequest, userIde
 	}
 	offset := (page - 1) * size
 
+	ur := new(models.UserRepository)
+	_, err = l.svcCtx.Engine.Table("user_repository").Select("id").
+		Where("identity = ?", req.Identity).Get(ur)
+	if err != nil {
+		return nil, err
+	}
 	// 查询用户文件列表
-	err = l.svcCtx.Engine.Table("user_repository").Where("parent_id = ? AND user_identity = ? ", req.Id, userIdentity).
+	err = l.svcCtx.Engine.Table("user_repository").Where("parent_id = ? AND user_identity = ? ", ur.Id, userIdentity).
 		Select("user_repository.id, user_repository.identity, user_repository.repository_identity, user_repository.ext,"+
 			"user_repository.name, repository_pool.path, repository_pool.size").
 		Join("LEFT", "repository_pool", "user_repository.repository_identity = repository_pool.identity").
@@ -50,7 +56,7 @@ func (l *UserFileListLogic) UserFileList(req *types.UserFileListRequest, userIde
 		return
 	}
 	// 查询用户文件总数
-	cnt, err := l.svcCtx.Engine.Where("parent_id = ? AND user_identity = ? ", req.Id, userIdentity).Count(new(models.UserRepository))
+	cnt, err := l.svcCtx.Engine.Where("parent_id = ? AND user_identity = ? ", ur.Id, userIdentity).Count(new(models.UserRepository))
 	if err != nil {
 		return
 	}

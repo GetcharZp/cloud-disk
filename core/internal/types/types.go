@@ -110,9 +110,9 @@ type UserFileNameUpdateReply struct {
 }
 
 type UserFileListRequest struct {
-	Id   int64 `json:"id,optional"`
-	Page int   `json:"page,optional"`
-	Size int   `json:"size,optional"`
+	Identity string `json:"identity,optional"`
+	Page     int    `json:"page,optional"`
+	Size     int    `json:"size,optional"`
 }
 
 type UserFileListReply struct {
