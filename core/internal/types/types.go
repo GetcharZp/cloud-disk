@@ -130,6 +130,19 @@ type UserFile struct {
 	Size               int64  `json:"size"`
 }
 
+type UserFolderListRequest struct {
+	Identity string `json:"identity,optional"`
+}
+
+type UserFolderListReply struct {
+	List []*UserFolder `json:"list"`
+}
+
+type UserFolder struct {
+	Identity string `json:"identity"`
+	Name     string `json:"name"`
+}
+
 type UserRepositorySaveRequest struct {
 	ParentId           int64  `json:"parentId"`
 	RepositoryIdentity string `json:"repositoryIdentity"`

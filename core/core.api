@@ -37,6 +37,10 @@ service core-api {
 	@handler UserFileList
 	post /user/file/list(UserFileListRequest) returns (UserFileListReply)
 	
+	// 用户文件夹列表
+	@handler UserFolderList
+	post /user/folder/list(UserFolderListRequest) returns (UserFolderListReply)
+	
 	// 用户文件名称修改
 	@handler UserFileNameUpdate
 	post /user/file/name/update(UserFileNameUpdateRequest) returns (UserFileNameUpdateReply)
@@ -205,6 +209,19 @@ type UserFile {
 	Ext                string `json:"ext"`
 	Path               string `json:"path"`
 	Size               int64  `json:"size"`
+}
+
+type UserFolderListRequest {
+	Identity string `json:"identity,optional"`
+}
+
+type UserFolderListReply {
+	List []*UserFolder `json:"list"`
+}
+
+type UserFolder {
+	Identity string `json:"identity"`
+	Name     string `json:"name"`
 }
 
 type UserRepositorySaveRequest {
