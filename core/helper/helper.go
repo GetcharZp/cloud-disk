@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	uuid "github.com/satori/go.uuid"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"io"
@@ -111,6 +113,28 @@ func CosUpload(r *http.Request) (string, error) {
 		panic(err)
 	}
 	return define.CosBucket + "/" + key, nil
+}
+
+// MinIOUpload 上传到自建的minio中
+func MinIOUpload(r *http.Request) (string, error) {
+	minioClient, err := minio.New(define.MinIOEndpoint, &minio.Options{
+		Creds: credentials.NewStaticV4(define.MinIOAccessKeyID, define.MinIOAccessSecretKey, ""),
+	})
+	if err != nil {
+		return "", err
+	}
+
+	// 获取文件信息
+	file, fileHeader, err := r.FormFile("file")
+	bucketName := "cloud-disk"
+	objectName := UUID() + path.Ext(fileHeader.Filename)
+
+	_, err = minioClient.PutObject(context.Background(), bucketName, objectName, file, fileHeader.Size,
+		minio.PutObjectOptions{ContentType: "binary/octet-stream"})
+	if err != nil {
+		return "", err
+	}
+	return define.MinIOBucket + "/" + bucketName + "/" + objectName, nil
 }
 
 // CosInitPart 分片上传初始化

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"cloud-disk/core/define"
 	"cloud-disk/core/helper"
 	"cloud-disk/core/models"
 	"crypto/md5"
@@ -24,27 +25,36 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		file, fileHeader, err := r.FormFile("file")
 		if err != nil {
+			httpx.Error(w, err)
 			return
 		}
 		// 判断文件是否存在
 		b := make([]byte, fileHeader.Size)
 		_, err = file.Read(b)
 		if err != nil {
+			httpx.Error(w, err)
 			return
 		}
 		hash := fmt.Sprintf("%x", md5.Sum(b))
 		rp := new(models.RepositoryPool)
 		has, err := svcCtx.Engine.Where("hash = ?", hash).Get(rp)
 		if err != nil {
+			httpx.Error(w, err)
 			return
 		}
 		if has {
 			httpx.OkJson(w, &types.FileUploadReply{Identity: rp.Identity, Ext: rp.Ext, Name: rp.Name})
 			return
 		}
-		// 往COS中存储文件
-		cosPath, err := helper.CosUpload(r)
+		// 判断使用的存储引擎，默认使用COS
+		var filePath string
+		if define.ObjectStorageType == "minio" {
+			filePath, err = helper.MinIOUpload(r)
+		} else {
+			filePath, err = helper.CosUpload(r)
+		}
 		if err != nil {
+			httpx.Error(w, err)
 			return
 		}
 
@@ -53,7 +63,7 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		req.Ext = path.Ext(fileHeader.Filename)
 		req.Size = fileHeader.Size
 		req.Hash = hash
-		req.Path = cosPath
+		req.Path = filePath
 
 		l := logic.NewFileUploadLogic(r.Context(), svcCtx)
 		resp, err := l.FileUpload(&req)
