@@ -19,18 +19,18 @@ goctl api go -api core.api -dir . -style go_zero
 腾讯云COS帮助文档：https://cloud.tencent.com/document/product/436/31215
 
 ## 系统模块
-- [ ] 用户模块
+- [x] 用户模块
   - [x] 密码登录
   - [x] 刷新Authorization
   - [x] 邮箱注册
   - [x] 用户详情
-  - [ ] 用户容量
+  - [x] 用户容量
 - [x] 存储池模块
   - [x] 中心存储池资源管理
     - [x] 文件上传
     - [x] 文件秒传
     - [x] 文件分片上传
-    - [ ] 对接 MinIO
+    - [x] 对接 MinIO
     - [ ] 对接阿里对象存储
   - [x] 个人存储池资源管理
     - [x] 文件关联存储

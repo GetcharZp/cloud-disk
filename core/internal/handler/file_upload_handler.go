@@ -5,6 +5,7 @@ import (
 	"cloud-disk/core/helper"
 	"cloud-disk/core/models"
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"net/http"
 	"path"
@@ -28,6 +29,18 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.Error(w, err)
 			return
 		}
+		// 判断是否已达用户容量上限
+		userIdentity := r.Header.Get("UserIdentity")
+		ub := new(models.UserBasic)
+		has, err := svcCtx.Engine.Where("identity = ?", userIdentity).Select("now_volume, total_volume").Get(ub)
+		if err != nil {
+			httpx.Error(w, err)
+			return
+		}
+		if fileHeader.Size+ub.NowVolume > ub.TotalVolume {
+			httpx.Error(w, errors.New("已超出当前容量"))
+			return
+		}
 		// 判断文件是否存在
 		b := make([]byte, fileHeader.Size)
 		_, err = file.Read(b)
@@ -37,7 +50,7 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 		hash := fmt.Sprintf("%x", md5.Sum(b))
 		rp := new(models.RepositoryPool)
-		has, err := svcCtx.Engine.Where("hash = ?", hash).Get(rp)
+		has, err = svcCtx.Engine.Where("hash = ?", hash).Get(rp)
 		if err != nil {
 			httpx.Error(w, err)
 			return
