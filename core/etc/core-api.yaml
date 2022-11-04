@@ -8,3 +8,11 @@ Mysql:
 
 Redis:
   Addr: localhost:6379
+
+Log:
+  ServiceName: core-api
+  Mode: file
+  Path: logs
+  Level: info
+  Encoding: json
+  KeepDays: 7
