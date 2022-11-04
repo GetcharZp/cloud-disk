@@ -38,6 +38,11 @@ func (l *MailCodeSendRegisterLogic) MailCodeSendRegister(req *types.MailCodeSend
 		err = errors.New("该邮箱已被注册")
 		return
 	}
+	// 校验验证码是否在有效期内
+	codeTTL, _ := l.svcCtx.RDB.TTL(l.ctx, req.Email).Result()
+	if codeTTL.Seconds() > 0 || codeTTL.Seconds() == -1 {
+		return nil, errors.New("the verify code has not expired")
+	}
 	// 获取验证码
 	code := helper.RandCode()
 	// 存储验证码
